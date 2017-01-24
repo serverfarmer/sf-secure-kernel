@@ -22,12 +22,8 @@ install_link $base/modprobe/firewire-blacklist.conf /etc/modprobe.d/farmer-firew
 echo "setting up secure kernel configuration"
 sysctl -qp $base/sysctl/base.conf
 
-IPV6="enabled"
-if [ "`ip -6 route show default`" = "" ]; then
-	echo "disabling ipv6"
-	sysctl -qp $base/sysctl/ipv6.conf
-	IPV6="disabled"
-fi
+echo "disabling ipv6"
+sysctl -qp $base/sysctl/ipv6.conf
 
 if [ ! -f /etc/X11/xinit/xinitrc ]; then
 	echo "disabling sysrq (not needed on servers)"
@@ -38,10 +34,7 @@ fi
 echo "making new kernel configuration persistent"
 if [ -d /etc/sysctl.d ]; then
 	install_link $base/sysctl/base.conf /etc/sysctl.d/farmer-base.conf
-
-	if [ "$IPV6" != "enabled" ]; then
-		install_link $base/sysctl/ipv6.conf /etc/sysctl.d/farmer-ipv6.conf
-	fi
+	install_link $base/sysctl/ipv6.conf /etc/sysctl.d/farmer-ipv6.conf
 
 	if [ ! -f /etc/X11/xinit/xinitrc ]; then
 		install_link $base/sysctl/sysrq.conf /etc/sysctl.d/farmer-sysrq.conf
