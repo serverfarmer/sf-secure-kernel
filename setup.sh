@@ -25,6 +25,11 @@ sysctl -qp $base/sysctl/base.conf
 echo "disabling ipv6"
 sysctl -qp $base/sysctl/ipv6.conf
 
+if ! grep -q preferIPv4 /etc/environment; then
+	echo "forcing Java virtual machines to use ipv4"
+	echo 'JAVA_OPTS="-Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Addresses=true"' >>/etc/environment
+fi
+
 if [ ! -f /etc/X11/xinit/xinitrc ]; then
 	echo "disabling sysrq (not needed on servers)"
 	sysctl -qp $base/sysctl/sysrq.conf
