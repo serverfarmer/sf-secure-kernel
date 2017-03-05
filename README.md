@@ -4,7 +4,6 @@ including:
 - protection from bogus ICMP packets from fake/vicious routers
 - protection from SYN flood and small DDoS attacks
 - logging bad packets
-- disabling IPv6 if unused (no default route)
 - RAM protection by turning off Firewire interface
 - enforcing several standard protection mechanisms (eg. ASLR)
 
