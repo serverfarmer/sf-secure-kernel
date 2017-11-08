@@ -16,7 +16,8 @@ base=/opt/farm/ext/secure-kernel
 
 
 echo "disabling firewire interfaces"
-install_link $base/modprobe/firewire-blacklist.conf /etc/modprobe.d/farmer-firewire-blacklist.conf
+remove_link /etc/modprobe.d/farmer-firewire-blacklist.conf
+install_copy $base/modprobe/firewire-blacklist.conf /etc/modprobe.d/farmer-firewire-blacklist.conf
 
 
 echo "setting up secure kernel configuration"
@@ -30,10 +31,13 @@ fi
 
 echo "making new kernel configuration persistent"
 if [ -d /etc/sysctl.d ]; then
-	install_link $base/sysctl/base.conf /etc/sysctl.d/farmer-base.conf
+	remove_link /etc/sysctl.d/farmer-base.conf
+	remove_link /etc/sysctl.d/farmer-ipv6.conf
+	remove_link /etc/sysctl.d/farmer-sysrq.conf
+	install_copy $base/sysctl/base.conf /etc/sysctl.d/farmer-base.conf
 
 	if [ ! -f /etc/X11/xinit/xinitrc ]; then
-		install_link $base/sysctl/sysrq.conf /etc/sysctl.d/farmer-sysrq.conf
+		install_copy $base/sysctl/sysrq.conf /etc/sysctl.d/farmer-sysrq.conf
 
 		if [ -f /etc/sysctl.d/10-magic-sysrq.conf ]; then
 			mv -f /etc/sysctl.d/10-magic-sysrq.conf /etc/sysctl.d/10-magic-sysrq.conf.disabled
