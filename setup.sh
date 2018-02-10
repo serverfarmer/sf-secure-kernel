@@ -6,6 +6,9 @@
 if [ "`uname`" != "Linux" ]; then
 	echo "skipping secure kernel setup, unsupported system"
 	exit 0
+elif [ "$HWTYPE" = "oem" ]; then
+	echo "skipping secure kernel setup on oem platform"
+	exit 0
 elif [ "$HWTYPE" = "container" ] || [ "$HWTYPE" = "lxc" ]; then
 	echo "skipping secure kernel setup on container"
 	exit 0
