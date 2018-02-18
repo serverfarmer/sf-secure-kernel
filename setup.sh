@@ -23,14 +23,18 @@ remove_link /etc/modprobe.d/farmer-firewire-blacklist.conf
 install_copy $base/modprobe/firewire-blacklist.conf /etc/modprobe.d/farmer-firewire-blacklist.conf
 
 
-echo "setting up secure kernel configuration"
-sysctl -qp $base/sysctl/base.conf
 
-if [ ! -f /etc/X11/xinit/xinitrc ]; then
-	echo "disabling sysrq (not needed on servers)"
-	sysctl -qp $base/sysctl/sysrq.conf
+if [ "$OSTYPE" != "debian" ]; then
+	echo "delaying secure kernel configuration until system reboot"
+else
+	echo "setting up secure kernel configuration"
+	sysctl -qp $base/sysctl/base.conf
+
+	if [ ! -f /etc/X11/xinit/xinitrc ]; then
+		echo "disabling sysrq (not needed on servers)"
+		sysctl -qp $base/sysctl/sysrq.conf
+	fi
 fi
-
 
 echo "making new kernel configuration persistent"
 if [ -d /etc/sysctl.d ]; then
