@@ -6,5 +6,6 @@ including:
 - logging bad packets
 - RAM protection by turning off Firewire interface
 - enforcing several standard protection mechanisms (eg. ASLR)
+- restricting ptrace for non-root users
 
 It is compatible with all supported Linux systems.
