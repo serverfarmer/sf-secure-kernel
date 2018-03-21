@@ -6,6 +6,7 @@ including:
 - logging bad packets
 - RAM protection by turning off Firewire interface
 - enforcing several standard protection mechanisms (eg. ASLR)
-- restricting ptrace for non-root users
+- restricting ptrace and dmesg for non-root users
+- disabling core dumping by setuid/setgid programs
 
 It is compatible with all supported Linux systems.

@@ -3,6 +3,14 @@
 . /opt/farm/scripts/functions.install
 
 
+disable_file() {
+	file=$1
+	if [ -f $file ]; then
+		mv -f $file $file.disabled
+	fi
+}
+
+
 if [ "`uname`" != "Linux" ]; then
 	echo "skipping secure kernel setup, unsupported system"
 	exit 0
@@ -42,12 +50,11 @@ if [ -d /etc/sysctl.d ]; then
 	remove_link /etc/sysctl.d/farmer-ipv6.conf
 	remove_link /etc/sysctl.d/farmer-sysrq.conf
 	install_copy $base/sysctl/base.conf /etc/sysctl.d/farmer-base.conf
+	disable_file /etc/sysctl.d/10-kernel-hardening.conf
+	disable_file /etc/sysctl.d/10-ptrace.conf
 
 	if [ ! -f /etc/X11/xinit/xinitrc ]; then
 		install_copy $base/sysctl/sysrq.conf /etc/sysctl.d/farmer-sysrq.conf
-
-		if [ -f /etc/sysctl.d/10-magic-sysrq.conf ]; then
-			mv -f /etc/sysctl.d/10-magic-sysrq.conf /etc/sysctl.d/10-magic-sysrq.conf.disabled
-		fi
+		disable_file /etc/sysctl.d/10-magic-sysrq.conf
 	fi
 fi
