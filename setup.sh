@@ -46,13 +46,21 @@ fi
 
 echo "making new kernel configuration persistent"
 if [ -d /etc/sysctl.d ]; then
+
+	# transitional code
 	remove_link /etc/sysctl.d/farmer-base.conf
 	remove_link /etc/sysctl.d/farmer-ipv6.conf
 	remove_link /etc/sysctl.d/farmer-sysrq.conf
+
+	# install new configuration sets
 	install_copy $base/sysctl/base.conf /etc/sysctl.d/farmer-base.conf
+	install_copy $base/sysctl/network.conf /etc/sysctl.d/farmer-network.conf
+
+	# disable conflicting Ubuntu default
 	disable_file /etc/sysctl.d/10-kernel-hardening.conf
 	disable_file /etc/sysctl.d/10-ptrace.conf
 
+	# disable sysrq on text-only hosts
 	if [ ! -f /etc/X11/xinit/xinitrc ]; then
 		install_copy $base/sysctl/sysrq.conf /etc/sysctl.d/farmer-sysrq.conf
 		disable_file /etc/sysctl.d/10-magic-sysrq.conf
